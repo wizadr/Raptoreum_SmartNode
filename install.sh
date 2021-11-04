@@ -34,7 +34,7 @@ X_POINT="${BLINKRED}\xE2\x9D\x97${NC}"
 echo -e "${YELLOW}==========================================================="
 echo -e 'tRTM Smartnode Setup'
 echo -e "===========================================================${NC}"
-echo -e "${BLUE}July 2021, created and updated by dk808 from AltTank${NC}"
+echo -e "${BLUE}Testnet 2021, created and updated by dk808 from AltTank${NC}"
 echo -e "${BLUE}With Smartnode healthcheck by Delgon${NC}"
 echo -e
 echo -e "${CYAN}Node setup starting, press [CTRL-C] to cancel.${NC}"
