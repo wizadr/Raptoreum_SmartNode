@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR='/raptoreum/.raptoreumcore'
-BOOTSTRAP_TAR='https://www.dropbox.com/s/y885aysstdmro4n/rtm-bootstrap.tar.gz'
+BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
 
 if [ ! -d $DIR ]; then
   mkdir -p $DIR
