@@ -30,8 +30,8 @@ rpcallowip=127.0.0.1
 rpcbind=127.0.0.1
 server=1
 listen=1
-addnode=testnet.raptoreum.com
-// addnode=raptor.mopsus.com
+addnode=explorer.raptoreum.com
+addnode=raptor.mopsus.com
 EOF
   fi
 fi
@@ -42,7 +42,7 @@ if [ ! -e /usr/local/bin/healthcheck.sh ]; then
   cat << EOF > healthcheck.sh
 #!/bin/bash
 
-POSE_SCORE=\$(curl -s "https://testnet.raptoreum.com/api/protx?command=info&protxhash=${PROTX_HASH}" | jq -r '.state.PoSePenalty')
+POSE_SCORE=\$(curl -s "https://explorer.raptoreum.com/api/protx?command=info&protxhash=${PROTX_HASH}" | jq -r '.state.PoSePenalty')
 if ((POSE_SCORE>0)); then
   kill -15 -1
   sleep 15
