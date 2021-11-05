@@ -1,9 +1,9 @@
 #!/bin/bash
 # URLs for raptoreum explorers. Main and backup one.
-URL=( 'https://testnet.raptoreum.com/' 'https://testnet.raptoreum.com/' )
+URL=( 'https://explorer.raptoreum.com/' 'https://raptor.mopsus.com/' )
 URL_ID=0
 
-BOOTSTRAP_TAR='https://github.com/Raptor3um/raptoreum/releases/download/1.3.15.99/testnet_bootstrap_with_indexes.zip'
+BOOTSTRAP_TAR='https://www.dropbox.com/s/y885aysstdmro4n/rtm-bootstrap.tar.gz'
 
 POSE_SCORE=0
 PREV_SCORE=0
@@ -151,7 +151,7 @@ function BootstrapChain () {
   echo "$(date -u)  Download and prepare rtm-bootstrap."
   rm -rf /tmp/bootstrap 2>/dev/null
   mkdir -p /tmp/bootstrap 2>/dev/null
-  curl -L "$BOOTSTRAP_TAR" | unzip -C /tmp/bootstrap/
+  curl -L "$BOOTSTRAP_TAR" | tar xz -C /tmp/bootstrap/
   
   echo "$(date -u)  Kill raptoreumd."
   killall -9 raptoreumd 2>/dev/null
