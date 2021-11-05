@@ -1,9 +1,9 @@
 #!/bin/bash
 # URLs for raptoreum explorers. Main and backup one.
-URL=( 'https://explorer.raptoreum.com/' 'https://raptor.mopsus.com/' )
+URL=( 'https://testnet.raptoreum.com/' 'https://testnet.raptoreum.com/' )
 URL_ID=0
 
-BOOTSTRAP_TAR='https://www.dropbox.com/s/y885aysstdmro4n/rtm-bootstrap.tar.gz'
+BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
 
 POSE_SCORE=0
 PREV_SCORE=0
