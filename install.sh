@@ -3,10 +3,10 @@
 COIN_NAME='raptoreum'
 
 #wallet information
-BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
+BOOTSTRAP_TAR='https://www.dropbox.com/s/y885aysstdmro4n/rtm-bootstrap.tar.gz'
 CONFIG_DIR='.raptoreumcore'
 CONFIG_FILE='raptoreum.conf'
-PORT='10227'
+PORT='10226'
 SSHPORT='22'
 COIN_DAEMON='raptoreumd'
 COIN_CLI='raptoreum-cli'
@@ -32,9 +32,9 @@ X_POINT="${BLINKRED}\xE2\x9D\x97${NC}"
 #
 
 echo -e "${YELLOW}==========================================================="
-echo -e 'tRTM Smartnode Setup'
+echo -e 'RTM Smartnode Setup'
 echo -e "===========================================================${NC}"
-echo -e "${BLUE}Testnet 2021, created and updated by dk808 from AltTank${NC}"
+echo -e "${BLUE}July 2021, created and updated by dk808 from AltTank${NC}"
 echo -e "${BLUE}With Smartnode healthcheck by Delgon${NC}"
 echo -e
 echo -e "${CYAN}Node setup starting, press [CTRL-C] to cancel.${NC}"
@@ -46,7 +46,7 @@ fi
 
 #functions
 function wipe_clean() {
-  echo -e "${YELLOW}Removing any instances of tRTM...${NC}"
+  echo -e "${YELLOW}Removing any instances of RTM...${NC}"
   sudo systemctl stop $COIN_NAME > /dev/null 2>&1
   sudo $COIN_CLI stop > /dev/null 2>&1
   sudo killall $COIN_DAEMON > /dev/null 2>&1
@@ -145,15 +145,15 @@ daemon=1
 listen=1
 smartnodeblsprivkey=$smartnodeblsprivkey
 externalip=$WANIP
-addnode=testnet.raptoreum.com
-// addnode=raptor.mopsus.com
-maxconnections=1024
+addnode=explorer.raptoreum.com
+addnode=raptor.mopsus.com
+maxconnections=256
 EOF
 }
 
 function install_bins() {
   echo -e "${YELLOW}Installing latest binaries...${NC}"
-  WALLET_TAR=$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
+  WALLET_TAR=$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
   mkdir temp
   curl -L $WALLET_TAR | tar xz -C ./temp; sudo mv ./temp/$COIN_DAEMON ./temp/$COIN_CLI ./temp/$COIN_TX $COIN_PATH
   sudo chmod 755 ${COIN_PATH}/${COIN_NAME}*
@@ -169,7 +169,7 @@ function bootstrap() {
     fi
   elif [[ ! -z $BOOTSTRAP_ANS ]]; then
     echo -e "${YELLOW}Downloading wallet bootstrap please be patient...${NC}"
-    curl -L $BOOTSTRAP_TAR | unzip -C $HOME/$CONFIG_DIR
+    curl -L $BOOTSTRAP_TAR | tar xz -C $HOME/$CONFIG_DIR
   else
     echo -e "${YELLOW}Skipping bootstrap...${NC}"
   fi
@@ -180,7 +180,7 @@ function update_script() {
     touch $HOME/update.sh
     cat << EOF > $HOME/update.sh
 #!/bin/bash
-WALLET_TAR=\$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
+WALLET_TAR=\$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
 COIN_NAME='raptoreum'
 COIN_DAEMON='raptoreumd'
 COIN_CLI='raptoreum-cli'
@@ -199,7 +199,7 @@ EOF
 }
 
 function create_service() {
-  echo -e "${YELLOW}Creating tRTM service...${NC}"
+  echo -e "${YELLOW}Creating RTM service...${NC}"
   sudo touch /etc/systemd/system/$COIN_NAME.service
   sudo chown $USERNAME:$USERNAME /etc/systemd/system/$COIN_NAME.service
   cat << EOF > /etc/systemd/system/$COIN_NAME.service
@@ -311,7 +311,7 @@ function cron_job() {
       PROTX_HASH=$(whiptail --inputbox "Please enter your protx hash for this SmartNode" 8 51 3>&1 1>&2 2>&3)
     fi
   elif [[ ! -z $CRON_ANS ]]; then
-    cat <(curl -s https://raw.githubusercontent.com/wizadr/Raptoreum_Smartnode/main/check.sh) >$HOME/check.sh
+    cat <(curl -s https://raw.githubusercontent.com/dk808/Raptoreum_Smartnode/main/check.sh) >$HOME/check.sh
     sed -i "s/#NODE_PROTX=/NODE_PROTX=\"${PROTX_HASH}\"/g" $HOME/check.sh
     sudo chmod 775 $HOME/check.sh
     crontab -l | grep -v "SHELL=/bin/bash" | crontab -
@@ -352,7 +352,7 @@ STOP='\e[0m'
 X_POINT="\${BLINKRED}\xE2\x9D\x97\${NC}"
 
 printf "\${BLUE}"
-figlet -t -k "tRTM  SMARTNODES"
+figlet -t -k "RTM  SMARTNODES"
 printf "\${STOP}"
 
 echo -e "\${YELLOW}================================================================================================"
@@ -406,4 +406,3 @@ EOF
   log_rotate
   update_script
   create_motd
-
