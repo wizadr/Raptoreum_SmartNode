@@ -3,7 +3,7 @@
 COIN_NAME='raptoreum'
 
 #wallet information
-BOOTSTRAP_TAR='https://www.dropbox.com/s/y885aysstdmro4n/rtm-bootstrap.tar.gz'
+BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
 CONFIG_DIR='.raptoreumcore'
 CONFIG_FILE='raptoreum.conf'
 PORT='10226'
@@ -32,7 +32,7 @@ X_POINT="${BLINKRED}\xE2\x9D\x97${NC}"
 #
 
 echo -e "${YELLOW}==========================================================="
-echo -e 'RTM Smartnode Setup'
+echo -e 'tRTM Smartnode Setup'
 echo -e "===========================================================${NC}"
 echo -e "${BLUE}July 2021, created and updated by dk808 from AltTank${NC}"
 echo -e "${BLUE}With Smartnode healthcheck by Delgon${NC}"
@@ -145,15 +145,14 @@ daemon=1
 listen=1
 smartnodeblsprivkey=$smartnodeblsprivkey
 externalip=$WANIP
-addnode=explorer.raptoreum.com
-addnode=raptor.mopsus.com
+addnode=testnet.raptoreum.com
 maxconnections=256
 EOF
 }
 
 function install_bins() {
   echo -e "${YELLOW}Installing latest binaries...${NC}"
-  WALLET_TAR=$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
+  WALLET_TAR=$(curl -s https://api.github.com/repos/wizadr/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
   mkdir temp
   curl -L $WALLET_TAR | tar xz -C ./temp; sudo mv ./temp/$COIN_DAEMON ./temp/$COIN_CLI ./temp/$COIN_TX $COIN_PATH
   sudo chmod 755 ${COIN_PATH}/${COIN_NAME}*
@@ -180,7 +179,7 @@ function update_script() {
     touch $HOME/update.sh
     cat << EOF > $HOME/update.sh
 #!/bin/bash
-WALLET_TAR=\$(curl -s https://api.github.com/repos/Raptor3um/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
+WALLET_TAR=\$(curl -s https://api.github.com/repos/wizadr/raptoreum/releases/latest | jq -r '.assets[] | select(.name|test("ubuntu18.")) | .browser_download_url')
 COIN_NAME='raptoreum'
 COIN_DAEMON='raptoreumd'
 COIN_CLI='raptoreum-cli'
@@ -311,7 +310,7 @@ function cron_job() {
       PROTX_HASH=$(whiptail --inputbox "Please enter your protx hash for this SmartNode" 8 51 3>&1 1>&2 2>&3)
     fi
   elif [[ ! -z $CRON_ANS ]]; then
-    cat <(curl -s https://raw.githubusercontent.com/dk808/Raptoreum_Smartnode/main/check.sh) >$HOME/check.sh
+    cat <(curl -s https://raw.githubusercontent.com/wizadr/Raptoreum_Smartnode/main/check.sh) >$HOME/check.sh
     sed -i "s/#NODE_PROTX=/NODE_PROTX=\"${PROTX_HASH}\"/g" $HOME/check.sh
     sudo chmod 775 $HOME/check.sh
     crontab -l | grep -v "SHELL=/bin/bash" | crontab -
@@ -352,7 +351,7 @@ STOP='\e[0m'
 X_POINT="\${BLINKRED}\xE2\x9D\x97\${NC}"
 
 printf "\${BLUE}"
-figlet -t -k "RTM  SMARTNODES"
+figlet -t -k "tRTM  SMARTNODES"
 printf "\${STOP}"
 
 echo -e "\${YELLOW}================================================================================================"
