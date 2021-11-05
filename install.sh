@@ -46,7 +46,7 @@ fi
 
 #functions
 function wipe_clean() {
-  echo -e "${YELLOW}Removing any instances of RTM...${NC}"
+  echo -e "${YELLOW}Removing any instances of tRTM...${NC}"
   sudo systemctl stop $COIN_NAME > /dev/null 2>&1
   sudo $COIN_CLI stop > /dev/null 2>&1
   sudo killall $COIN_DAEMON > /dev/null 2>&1
@@ -198,7 +198,7 @@ EOF
 }
 
 function create_service() {
-  echo -e "${YELLOW}Creating RTM service...${NC}"
+  echo -e "${YELLOW}Creating tRTM service...${NC}"
   sudo touch /etc/systemd/system/$COIN_NAME.service
   sudo chown $USERNAME:$USERNAME /etc/systemd/system/$COIN_NAME.service
   cat << EOF > /etc/systemd/system/$COIN_NAME.service
