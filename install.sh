@@ -31,13 +31,8 @@ X_POINT="${BLINKRED}\xE2\x9D\x97${NC}"
 #end of required details
 #
 
-echo -e "${YELLOW}==========================================================="
-echo -e 'tRTM Smartnode Setup'
-echo -e "===========================================================${NC}"
-echo -e "${BLUE}July 2021, created and updated by dk808 from AltTank${NC}"
-echo -e "${BLUE}With Smartnode healthcheck by Delgon${NC}"
-echo -e
-echo -e "${CYAN}Node setup starting, press [CTRL-C] to cancel.${NC}"
+
+echo -e "${CYAN}tRTM Node setup starting, press [CTRL-C] to cancel.${NC}"
 sleep 5
 if [ "$USERNAME" = "root" ]; then
   echo -e "${CYAN}You are currently logged in as ${NC}root${CYAN}, please switch to a sudo user.${NC}"
@@ -45,27 +40,27 @@ if [ "$USERNAME" = "root" ]; then
 fi
 
 #functions
-function wipe_clean() {
-  echo -e "${YELLOW}Removing any instances of tRTM...${NC}"
-  sudo systemctl stop $COIN_NAME > /dev/null 2>&1
-  sudo $COIN_CLI stop > /dev/null 2>&1
-  sudo killall $COIN_DAEMON > /dev/null 2>&1
-  sudo rm /usr/local/bin/$COIN_NAME* > /dev/null 2>&1
-  sudo rm /usr/bin/$COIN_NAME* > /dev/null 2>&1
-  rm -rf $HOME/$CONFIG_DIR > /dev/null 2>&1
-  rm update.sh check.sh > /dev/null 2>&1
-}
+#function wipe_clean() {
+#  echo -e "${YELLOW}Removing any instances of tRTM...${NC}"
+#  sudo systemctl stop $COIN_NAME > /dev/null 2>&1
+#  sudo $COIN_CLI stop > /dev/null 2>&1
+#  sudo killall $COIN_DAEMON > /dev/null 2>&1
+#  sudo rm /usr/local/bin/$COIN_NAME* > /dev/null 2>&1
+#  sudo rm /usr/bin/$COIN_NAME* > /dev/null 2>&1
+#  rm -rf $HOME/$CONFIG_DIR > /dev/null 2>&1
+#  rm update.sh check.sh > /dev/null 2>&1
+#}
 
-function ssh_port() {
-  echo -e "${YELLOW}Detecting SSH port being used...${NC}" && sleep 1
-  SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
-  if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
-    SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
-    echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-  else
-    echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-  fi
-}
+#function ssh_port() {
+#  echo -e "${YELLOW}Detecting SSH port being used...${NC}" && sleep 1
+#  SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
+#  if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
+#    SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
+#    echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+#  else
+#    echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+#  fi
+#}
 
 function ip_confirm() {
   echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
@@ -145,7 +140,7 @@ daemon=1
 listen=1
 smartnodeblsprivkey=$smartnodeblsprivkey
 externalip=$WANIP
-addnode=testnet.raptoreum.com
+# addnode=testnet.raptoreum.com
 maxconnections=256
 EOF
 }
@@ -229,38 +224,38 @@ EOF
 
 SECURITY_ANS=""
 # If $1 is provided, just ask about bootstrap
-function basic_security() {
-  if [[ ! -z $1 ]]; then
-    if whiptail --yesno "Would you like to setup basic firewall and fail2ban?" 8 56; then
-      SECURITY_ANS=1
-    fi
-  elif [[ ! -z $SECURITY_ANS ]]; then
-    echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
-    sudo apt-get install ufw fail2ban -y
-    sudo ufw allow $SSHPORT/tcp
-    sudo ufw allow $PORT/tcp
-    sudo ufw logging on
-    sudo ufw default deny incoming
-    sudo ufw default allow outgoing
-    sudo ufw limit OpenSSH
-    echo "y" | sudo ufw enable > /dev/null 2>&1
-    sudo touch /etc/fail2ban/jail.local
-    sudo chown $USERNAME:$USERNAME /etc/fail2ban/jail.local
-    cat << EOF > /etc/fail2ban/jail.local
-[sshd]
-enabled = true
-port = $SSHPORT
-filter = sshd
-logpath = /var/log/auth.log
-maxretry = 3
-EOF
-    sudo chown root:root /etc/fail2ban/jail.local
-    sudo systemctl restart fail2ban > /dev/null 2>&1
-    sudo systemctl enable fail2ban > /dev/null 2>&1
-  else
-    echo -e "${YELLOW}Skipping basic security...${NC}"
-  fi
-}
+#function basic_security() {
+#  if [[ ! -z $1 ]]; then
+#    if whiptail --yesno "Would you like to setup basic firewall and fail2ban?" 8 56; then
+#      SECURITY_ANS=1
+#    fi
+#  elif [[ ! -z $SECURITY_ANS ]]; then
+#    echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
+#    sudo apt-get install ufw fail2ban -y
+#    sudo ufw allow $SSHPORT/tcp
+#    sudo ufw allow $PORT/tcp
+#    sudo ufw logging on
+#    sudo ufw default deny incoming
+#    sudo ufw default allow outgoing
+#    sudo ufw limit OpenSSH
+#    echo "y" | sudo ufw enable > /dev/null 2>&1
+#    sudo touch /etc/fail2ban/jail.local
+#    sudo chown $USERNAME:$USERNAME /etc/fail2ban/jail.local
+#    cat << EOF > /etc/fail2ban/jail.local
+#[sshd]
+#enabled = true
+#port = $SSHPORT
+#filter = sshd
+#logpath = /var/log/auth.log
+#maxretry = 3
+#EOF
+#    sudo chown root:root /etc/fail2ban/jail.local
+#    sudo systemctl restart fail2ban > /dev/null 2>&1
+#    sudo systemctl enable fail2ban > /dev/null 2>&1
+#  else
+#    echo -e "${YELLOW}Skipping basic security...${NC}"
+#  fi
+#}
 
 function start_daemon() {
   NUM='180'
@@ -280,25 +275,25 @@ function start_daemon() {
   fi
 }
 
-function log_rotate() {
-  echo -e "${YELLOW}Configuring logrotate function for debug log...${NC}"
-  if [ -f /etc/logrotate.d/rtmdebuglog ]; then
-    echo -e "${YELLOW}Existing log rotate conf found, backing up to ~/rtmdebuglogrotate.old ...${NC}"
-    sudo mv /etc/logrotate.d/rtmdebuglog ~/rtmdebuglogrotate.old
-  fi
-  sudo touch /etc/logrotate.d/rtmdebuglog
-  sudo chown $USERNAME:$USERNAME /etc/logrotate.d/rtmdebuglog
-  cat << EOF > /etc/logrotate.d/rtmdebuglog
-/home/$USERNAME/.raptoreumcore/debug.log {
-  compress
-  copytruncate
-  missingok
-  daily
-  rotate 7
-}
-EOF
-  sudo chown root:root /etc/logrotate.d/rtmdebuglog
-}
+#function log_rotate() {
+#  echo -e "${YELLOW}Configuring logrotate function for debug log...${NC}"
+#  if [ -f /etc/logrotate.d/rtmdebuglog ]; then
+#    echo -e "${YELLOW}Existing log rotate conf found, backing up to ~/rtmdebuglogrotate.old ...${NC}"
+#    sudo mv /etc/logrotate.d/rtmdebuglog ~/rtmdebuglogrotate.old
+#  fi
+#  sudo touch /etc/logrotate.d/rtmdebuglog
+#  sudo chown $USERNAME:$USERNAME /etc/logrotate.d/rtmdebuglog
+#  cat << EOF > /etc/logrotate.d/rtmdebuglog
+#/home/$USERNAME/.raptoreumcore/debug.log {
+#  compress
+#  copytruncate
+#  missingok
+#  daily
+#  rotate 7
+#}
+#EOF
+#  sudo chown root:root /etc/logrotate.d/rtmdebuglog
+#}
 
 CRON_ANS=""
 PROTX_HASH=""
@@ -354,8 +349,8 @@ printf "\${BLUE}"
 figlet -t -k "tRTM  SMARTNODES"
 printf "\${STOP}"
 
-echo -e "\${YELLOW}================================================================================================"
-echo -e "\${CYAN}COURTESY OF DK808 FROM ALTTANK ARMY\${NC}"
+#echo -e "\${YELLOW}================================================================================================"
+#echo -e "\${CYAN}COURTESY OF DK808 FROM ALTTANK ARMY\${NC}"
 echo -e "\${CYAN}Smartnode healthcheck by Delgon\${NC}"
 echo
 echo -e "\${YELLOW}Commands to manage \$COIN_NAME service\${NC}"
@@ -389,7 +384,7 @@ EOF
   ip_confirm
   create_swap
   create_conf true
-  basic_security true
+# basic_security true
   bootstrap true
   cron_job true
 
@@ -399,9 +394,9 @@ EOF
   create_conf
   bootstrap
   create_service
-  basic_security
+# basic_security
   start_daemon
   cron_job
-  log_rotate
+#  log_rotate
   update_script
   create_motd
