@@ -1,16 +1,16 @@
 #!/bin/bash
 
-COIN_NAME='traptoreum'
+COIN_NAME='raptoreum'
 
 #wallet information
 BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
-CONFIG_DIR='.traptoreumcore'
-CONFIG_FILE='traptoreum.conf'
+CONFIG_DIR='.raptoreumcore'
+CONFIG_FILE='raptoreum.conf'
 PORT='10227'
 SSHPORT='22'
-COIN_DAEMON='traptoreumd'
-COIN_CLI='traptoreum-cli'
-COIN_TX='traptoreum-tx'
+COIN_DAEMON='raptoreumd'
+COIN_CLI='raptoreum-cli'
+COIN_TX='raptoreum-tx'
 COIN_PATH='/usr/local/bin'
 USERNAME="$(whoami)"
 
