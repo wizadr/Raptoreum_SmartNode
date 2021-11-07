@@ -1,16 +1,16 @@
 #!/bin/bash
 
-COIN_NAME='raptoreum'
+COIN_NAME='traptoreum'
 
 #wallet information
 BOOTSTRAP_TAR='https://github.com/wizadr/Raptoreum_SmartNode/releases/download/testnet/bootstrap.tgz'
-CONFIG_DIR='.raptoreumcore'
-CONFIG_FILE='raptoreum.conf'
+CONFIG_DIR='.traptoreumcore'
+CONFIG_FILE='traptoreum.conf'
 PORT='10227'
 SSHPORT='22'
-COIN_DAEMON='raptoreumd'
-COIN_CLI='raptoreum-cli'
-COIN_TX='raptoreum-tx'
+COIN_DAEMON='traptoreumd'
+COIN_CLI='traptoreum-cli'
+COIN_TX='traptoreum-tx'
 COIN_PATH='/usr/local/bin'
 USERNAME="$(whoami)"
 
@@ -64,7 +64,8 @@ fi
 
 function ip_confirm() {
   echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
-  WANIP=$(wget http://ipecho.net/plain -O - -q)
+  // WANIP=$(wget https://ifconfig.co/ip -O - -q)
+  WANIP=$(curl https://ifconfig.co/ip -O - -q)
   if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
       WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
   fi
@@ -87,8 +88,8 @@ function ip_confirm() {
 
 function install_packages() { 
   echo -e "${YELLOW}Installing Packages...${NC}"
-  sudo apt-get update -y
-  sudo apt-get upgrade -y
+//  sudo apt-get update -y
+//  sudo apt-get upgrade -y
   sudo apt-get install nano htop pwgen figlet unzip curl jq -y
   echo -e "${YELLOW}Packages complete...${NC}"
 }
